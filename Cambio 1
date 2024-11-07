@@ -1,0 +1,68 @@
+# Programa de agengeda de contactBook o contactos (4)
+# Contactos
+
+
+class ContactBook:
+    def __init__(self):
+        self.contacts = {}
+        self.history = []
+
+    def agregar_contacto(self, name, phone, email):
+        if name in self.contacts:
+            print(f"Contacto {name} ya existe.")
+        else:
+            self.contacts[name] = {"telefono": phone, "correo": email}
+            self.history.append((name, "agregado", {"telefono": phone, "correo": email}))
+
+    def modificar_contacto(self, name, phone=None, email=None):
+        if name not in self.contacts:
+            print(f"Contacto {name} no existe .")
+        else:
+            old_contact = self.contacts[name].copy()
+            if phone:
+                self.contacts[name]["telefono"] = phone
+            if email:
+                self.contacts[name]["correo"] = email
+            new_contact = self.contacts[name]
+            self.history.append((name, "modified", {"viejo": old_contact, "nuevo": new_contact}))
+
+    def eliminar_contacto(self, name):
+        if name in self.contacts:
+            deleted_contact = self.contacts.pop(name)
+            self.history.append((name, "eliminar", deleted_contact))
+        else:
+            print(f"Contacto {name} no existe.")
+
+    def obtener_contacto(self, name):
+        return self.contacts.get(name, f"Contacto {name} no existe.")
+
+    def obtener_historia(self):
+        return self.history
+
+    def mostrar_contactos(self):
+        for name, info in self.contacts.items():
+            print(f"Name: {name}, telefono: {info['telefono']}, corre: {info['email']}")
+
+#  Forma de como usar los contactos
+if __name__ == "__main__":
+    contact_book = ContactBook()
+
+    # Para agregar los contactos
+    contact_book.agregar_contacto("Estalin", "809-773-4202", "estalinmedinavaldez@mail.com")
+    contact_book.agregar_contacto("Estalin", "809-202-0222", "estalinmedinavaldez2001@gmail.com")
+
+    # Modificar los contactos
+    contact_book.modificar_contacto("Estalin", phone="809-486-7489")
+
+    # Eliminar uno o mas  contactos
+    contact_book.eliminar_contacto("Estalin")
+
+    # Mostrar los contactos
+    print("Contactos actuales:")
+    contact_book.mostrar_contactos()
+
+    # Consultar el historial de las modificaciones
+    print("\nHistorial de modificaciones:")
+    for record in contact_book.obtener_historia():
+        print(record)
+
